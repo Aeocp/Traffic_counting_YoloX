@@ -18,7 +18,7 @@ for filename in os.listdir(root_path):
         with open(os.path.join(root_path, filename)) as f:
             Path(root_path + filename).rename(xmlfilepath + filename)
 
-txtsavepath = root_path + '/ImageSets/Main'
+txtsavepath = root_path + '/VOC2007/ImageSets/Main'
 
 if not os.path.exists(root_path):
     print("cannot find such directory: " + root_path)
