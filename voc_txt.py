@@ -9,14 +9,21 @@ if len(sys.argv) < 2:
 
 root_path = sys.argv[1]
 
-xmlfilepath = root_path + '/Annotations/'
+xmlfilepath = root_path + '/VOC2007/Annotations/'
 os.mkdir(xmlfilepath)
+imagefilepath = root_path + '/VOC2007/JPEGImages/'
+os.mkdir(imagefilepath)
 
 # Move annotations to annotations folder
 for filename in os.listdir(root_path):
     if filename.endswith('.xml'):
         with open(os.path.join(root_path, filename)) as f:
             Path(root_path + filename).rename(xmlfilepath + filename)
+
+    if filename.endswith('.jpg'):
+        with open(os.path.join(root_path, filename)) as f:
+            Path(root_path + filename).rename(xmlfilepath + filename)
+
 
 txtsavepath = root_path + '/VOC2007/ImageSets/Main'
 
