@@ -3,8 +3,6 @@
 # Copyright (c) Megvii, Inc. and its affiliates.
 
 # VOC_CLASSES = ( '__background__', # always index 0
-import sys
-classes = tuple(sys.argv[1:])
 VOC_CLASSES = (
     "aeroplane",
     "bicycle",
@@ -27,5 +25,3 @@ VOC_CLASSES = (
     "train",
     "tvmonitor",
 )
-VOC_CLASSES = classes
-print("Classes:" + str(VOC_CLASSES))
