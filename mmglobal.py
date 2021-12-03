@@ -1,3 +1,3 @@
 def init():
     global frame_count
-    frame_count = 0
+    frame_count=0
