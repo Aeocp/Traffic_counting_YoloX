@@ -17,6 +17,8 @@ import argparse
 import os
 import time
 
+import mmglobal
+
 IMAGE_EXT = [".jpg", ".jpeg", ".webp", ".bmp", ".png"]
 
 
@@ -209,16 +211,32 @@ def imageflow_demo(predictor, vis_folder, current_time, args):
     vid_writer = cv2.VideoWriter(
         save_path, cv2.VideoWriter_fourcc(*"mp4v"), fps, (int(width), int(height))
     )
+    
+    # Hui: Create Window
+    #win_name = 'Video detection'
+    #cv2.namedWindow(win_name)
+
+    mmglobal.frame_count = 0;
+
     while True:
         ret_val, frame = cap.read()
         if ret_val:
-            outputs, img_info = predictor.inference(frame)
-            result_frame = predictor.visual(outputs[0], img_info, predictor.confthre)
-            if args.save_result:
-                vid_writer.write(result_frame)
-            ch = cv2.waitKey(1)
-            if ch == 27 or ch == ord("q") or ch == ord("Q"):
-                break
+          
+            # Process every n frames
+            if mmglobal.frame_count % 1 == 0:
+                outputs, img_info = predictor.inference(frame)
+                result_frame = predictor.visual(outputs[0], img_info, predictor.confthre)
+
+                # Hui: Show result image
+                #cv2.imshow(win_name, result_frame)
+
+                if args.save_result:
+                    vid_writer.write(result_frame)
+                ch = cv2.waitKey(1)
+                if ch == 27 or ch == ord("q") or ch == ord("Q"):
+                    break
+
+                mmglobal.frame_count +=1
         else:
             break
 
