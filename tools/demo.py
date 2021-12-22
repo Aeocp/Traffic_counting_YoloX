@@ -206,10 +206,10 @@ def imageflow_demo(predictor, vis_folder, current_time, args):
     if args.demo == "video":
         save_path = os.path.join(save_folder, args.path.split("/")[-1])
     else:
-        save_path = os.path.join(save_folder, "camera.mp4")
+        save_path = os.path.join(save_folder, "camera.mkv")
     logger.info(f"video save_path is {save_path}")
     vid_writer = cv2.VideoWriter(
-        save_path, cv2.VideoWriter_fourcc(*"mp4v"), fps, (int(width), int(height))
+        save_path, cv2.VideoWriter_fourcc(*"MJPG"), fps, (int(width), int(height))
     )
     
     # Hui: Create Window
@@ -223,7 +223,7 @@ def imageflow_demo(predictor, vis_folder, current_time, args):
         if ret_val:
           
             # Process every n frames
-            if mmglobal.frame_count % 1 == 0:
+            if mmglobal.frame_count % 100 == 0:
                 outputs, img_info = predictor.inference(frame)
                 result_frame = predictor.visual(outputs[0], img_info, predictor.confthre)
 
@@ -236,7 +236,7 @@ def imageflow_demo(predictor, vis_folder, current_time, args):
                 if ch == 27 or ch == ord("q") or ch == ord("Q"):
                     break
 
-                mmglobal.frame_count +=1
+                mmglobal.frame_count +=100
         else:
             break
 
