@@ -150,7 +150,7 @@ class Predictor(object):
             outputs = postprocess(
                 outputs, self.num_classes, self.confthre, self.nmsthre
             )
-            logger.info("Infer time: {:.4f}s".format(time.time() - t0))
+            #logger.info("Infer time: {:.4f}s".format(time.time() - t0))
         return outputs, img_info
 
     def visual(self, output, img_info, cls_conf=0.35):
@@ -195,7 +195,10 @@ def image_demo(predictor, vis_folder, path, current_time, save_result):
 
 
 def imageflow_demo(predictor, vis_folder, current_time, args):
-    cap = cv2.VideoCapture(args.path if args.demo == "video" else args.camid)
+    #video
+    #cap = cv2.VideoCapture(args.path if args.demo == "video" else args.camid) 
+    #url real-time
+    cap = cv2.VideoCapture("https://camerai1.iticfoundation.org/hls/pty02.m3u8") 
     width = cap.get(cv2.CAP_PROP_FRAME_WIDTH)  # float
     height = cap.get(cv2.CAP_PROP_FRAME_HEIGHT)  # float
     fps = cap.get(cv2.CAP_PROP_FPS)
@@ -223,7 +226,7 @@ def imageflow_demo(predictor, vis_folder, current_time, args):
         if ret_val:
           
             # Process every n frames
-            if mmglobal.frame_count % 100 == 0:
+            if mmglobal.frame_count % 1 == 0:
                 outputs, img_info = predictor.inference(frame)
                 result_frame = predictor.visual(outputs[0], img_info, predictor.confthre)
 
@@ -236,7 +239,9 @@ def imageflow_demo(predictor, vis_folder, current_time, args):
                 if ch == 27 or ch == ord("q") or ch == ord("Q"):
                     break
 
-                mmglobal.frame_count +=100
+                mmglobal.frame_count +=1
+            else:
+                mmglobal.frame_count +=1
         else:
             break
 
