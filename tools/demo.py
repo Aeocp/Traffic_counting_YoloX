@@ -195,10 +195,8 @@ def image_demo(predictor, vis_folder, path, current_time, save_result):
 
 
 def imageflow_demo(predictor, vis_folder, current_time, args):
-    #video
-    #cap = cv2.VideoCapture(args.path if args.demo == "video" else args.camid) 
-    #url real-time
-    cap = cv2.VideoCapture("https://camerai1.iticfoundation.org/hls/pty02.m3u8") 
+    #cap = cv2.VideoCapture(args.path if args.demo == "video" else args.camid) #video
+    cap = cv2.VideoCapture("https://camerai1.iticfoundation.org/hls/pty02.m3u8") #url real-time
     width = cap.get(cv2.CAP_PROP_FRAME_WIDTH)  # float
     height = cap.get(cv2.CAP_PROP_FRAME_HEIGHT)  # float
     fps = cap.get(cv2.CAP_PROP_FPS)
