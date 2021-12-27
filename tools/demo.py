@@ -221,8 +221,30 @@ def imageflow_demo(predictor, vis_folder, current_time, args):
 
     mmglobal.frame_count = 0;
     
+    # Definition of the parameters
+    max_cosine_distance = 0.75
+    nn_budget = None
+    nms_max_overlap = 1.0
+
+    # Deep SORT
+    model_filename = 'model_data/mars-small128.pb'
+    encoder = gdet.create_box_encoder(model_filename, batch_size=1) #function
+    
     metric = nn_matching.NearestNeighborDistanceMetric("cosine", max_cosine_distance, nn_budget)
     tracker = Tracker(metric)
+    
+    current_date = datetime.datetime.now().date()
+    count_dict = {}
+  
+    total_counter = []
+    class_counter = []  # store counts of each detected class
+    intersect_info = [] # initialise intersection list
+    for ll in range(l):
+        total_counter.append(0)
+        class_counter.append(Counter())
+        intersect_info.append([])
+    already_counted = deque(maxlen=50) # temporary memory for storing counted IDs
+    memory = {}
     
     #รับและเก็บตำแหน่งเส้นผ่าน
     l,x,y = newLine.createLine2()
