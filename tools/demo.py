@@ -19,6 +19,8 @@ import time
 
 import mmglobal
 
+import newLine
+
 IMAGE_EXT = [".jpg", ".jpeg", ".webp", ".bmp", ".png"]
 
 
@@ -169,7 +171,7 @@ class Predictor(object):
         scores = output[:, 4] * output[:, 5]
 
         vis_res = vis(img, bboxes, scores, cls, cls_conf, self.cls_names)
-        return vis_res
+        return vis_res,bboxes, scores, cls, cls_conf
 
 
 def image_demo(predictor, vis_folder, path, current_time, save_result):
@@ -180,7 +182,7 @@ def image_demo(predictor, vis_folder, path, current_time, save_result):
     files.sort()
     for image_name in files:
         outputs, img_info = predictor.inference(image_name)
-        result_image = predictor.visual(outputs[0], img_info, predictor.confthre)
+        result_image, bboxes, scores, cls, cls_conf = predictor.visual(outputs[0], img_info, predictor.confthre)
         if save_result:
             save_folder = os.path.join(
                 vis_folder, time.strftime("%Y_%m_%d_%H_%M_%S", current_time)
@@ -218,21 +220,107 @@ def imageflow_demo(predictor, vis_folder, current_time, args):
     #cv2.namedWindow(win_name)
 
     mmglobal.frame_count = 0;
-
+    
+    #รับและเก็บตำแหน่งเส้นผ่าน
+    l,x,y = newLine.createLine2()
+    line = []
+    ret_val, frame = cape.read()  
+    test = 1
+    frameY = frame.shape[0] 
+    frameX = frame.shape[1] 
+    for ll in range(l):
+    x1 = float(x[ll*2])
+    y1 = float(y[ll*2])
+    x2 = float(x[ll*2+1])
+    y2 = float(y[ll*2+1])
+    line_c = [(int(x1 * frameX), int(y1* frameY)), (int(x2 * frameX), int(y2 * frameY))]
+    line.append(line_c)  
+    #วาดเส้นผ่าน
+    for ll in range(l):
+        line_o = line[ll]
+        cv2.line(frame, line_o[0], line_o[1], (255, 255, 255), 2)
+        
     while True:
-        ret_val, frame = cap.read()
+        if (test == 1):
+            test = 0
+        else:
+            ret_val, frame = cap.read()
+            #วาดเส้นผ่าน
+            for ll in range(l):
+                line_o = line[ll]
+                cv2.line(frame, line_o[0], line_o[1], (255, 255, 255), 2)
         if ret_val:
-          
             # Process every n frames
-            if mmglobal.frame_count % 1 == 0:
+            t1 = time.time()
+            if mmglobal.frame_count % 3 == 0:
                 outputs, img_info = predictor.inference(frame)
-                result_frame = predictor.visual(outputs[0], img_info, predictor.confthre)
+                #รับข้อมูลทุกอย่าฃ
+                result_frame, bboxes, scores, cls, cls_conf = predictor.visual(outputs[0], img_info, predictor.confthre)
+                
+                #ต้องdeepsortเพราะอ่านแบบเว้นเฟรม
+                features = encoder(frame, boxes)
+                # represents a bounding box detection in a single image
+                detections = [Detection(bbox, confidence, cls, feature) for bbox, confidence, cls, feature in
+                              zip(boxes, confidence, classes, features)]
+                # Run non-maxima suppression.
+                boxes = np.array([d.tlwh for d in detections])        # List ของ [x y w h] ในแต่ละเฟรม
+                scores = np.array([d.confidence for d in detections]) # confidence
+                classes = np.array([d.cls for d in detections])       # class
+                indices = preprocessing.non_max_suppression(boxes, nms_max_overlap, scores) #กรองเฟรมที่ซ้อนทับกันออก
+                detections = [detections[i] for i in indices]
 
+                # Call the tracker
+                tracker.predict()   # ได้ mean vector และ covariance matrix จาก Kalman filter prediction step
+                tracker.update(detections)
+
+                for track in tracker.tracks:
+                    if not track.is_confirmed() or track.time_since_update > 1:
+                        continue
+                    bbox = track.to_tlbr()    # (min x, miny, max x, max y)
+                    track_cls = track.cls
+
+                    midpoint = track.tlbr_midpoint(bbox)
+                    # get midpoint respective to botton-left
+                    origin_midpoint = (midpoint[0], frame.shape[0] - midpoint[1])
+
+                    if track.track_id not in memory:
+                        memory[track.track_id] = deque(maxlen=2)  
+
+                    memory[track.track_id].append(midpoint)
+                    previous_midpoint = memory[track.track_id][0]
+                    origin_previous_midpoint = (previous_midpoint[0], frame.shape[0] - previous_midpoint[1])
+                    for ll in range(l):
+                        line_o = line[ll]
+                        TC = CheckCrossLine.LineCrossing(midpoint, previous_midpoint, line_o[0] ,line_o[1])
+                        if TC and (track.track_id not in already_counted):
+                            class_counter[ll][track_cls] += 1
+                            total_counter[ll] += 1
+                            # draw alert line
+                            cv2.line(frame, line_o[0], line_o[1], (0, 0, 255), 2)
+                            already_counted.append(track.track_id)  # Set already counted for ID to true.
+                            intersection_time = datetime.datetime.now() - datetime.timedelta(microseconds=datetime.datetime.now().microsecond)
+                            intersect_info[ll].append([track_cls, origin_midpoint, intersection_time])
+            
+                # Delete memory of old tracks.
+                # This needs to be larger than the number of tracked objects in the frame.
+                if len(memory) > 50:
+                    del memory[list(memory)[0]]
+                
+                # Draw total count.
+                yy = 0.1 * frame.shape[0]
+                for ll in range(l):
+                    xx = ll+1
+                    cv2.putText(frame, "Total{}: {}".format(str(xx),str(total_counter[ll])), (int(0.05 * frame.shape[1]), int(yy)), 0,
+                        1.5e-3 * frame.shape[0], (0, 255, 255), 2)
+                    y += 0.1 * frame.shape[0]
+                    print("Total",xx,": ",total_counter[ll])
+                    
                 # Hui: Show result image
                 #cv2.imshow(win_name, result_frame)
 
                 if args.save_result:
                     vid_writer.write(result_frame)
+                    vid_writer.write(frame)
                 ch = cv2.waitKey(1)
                 if ch == 27 or ch == ord("q") or ch == ord("Q"):
                     break
