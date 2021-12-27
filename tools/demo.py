@@ -221,6 +221,9 @@ def imageflow_demo(predictor, vis_folder, current_time, args):
 
     mmglobal.frame_count = 0;
     
+    metric = nn_matching.NearestNeighborDistanceMetric("cosine", max_cosine_distance, nn_budget)
+    tracker = Tracker(metric)
+    
     #รับและเก็บตำแหน่งเส้นผ่าน
     l,x,y = newLine.createLine2()
     line = []
