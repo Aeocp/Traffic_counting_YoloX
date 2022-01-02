@@ -270,12 +270,12 @@ def imageflow_demo(predictor, vis_folder, current_time, args):
     frameY = frame.shape[0] 
     frameX = frame.shape[1] 
     for ll in range(l):
-    x1 = float(x[ll*2])
-    y1 = float(y[ll*2])
-    x2 = float(x[ll*2+1])
-    y2 = float(y[ll*2+1])
-    line_c = [(int(x1 * frameX), int(y1* frameY)), (int(x2 * frameX), int(y2 * frameY))]
-    line.append(line_c)  
+        x1 = float(x[ll*2])
+        y1 = float(y[ll*2])
+        x2 = float(x[ll*2+1])
+        y2 = float(y[ll*2+1])
+        line_c = [(int(x1 * frameX), int(y1* frameY)), (int(x2 * frameX), int(y2 * frameY))]
+        line.append(line_c)  
     #วาดเส้นผ่าน
     for ll in range(l):
         line_o = line[ll]
