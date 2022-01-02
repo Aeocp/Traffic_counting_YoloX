@@ -185,9 +185,9 @@ class Predictor(object):
 
         cls = output[:, 6]
         scores = output[:, 4] * output[:, 5]
-
+        a = [bboxes, scores, cls]
         vis_res = vis(img, bboxes, scores, cls, cls_conf, self.cls_names)
-        return vis_res,bboxes, scores, cls, cls_conf
+        return vis_res, a
 
 
 def image_demo(predictor, vis_folder, path, current_time, save_result):
@@ -265,7 +265,7 @@ def imageflow_demo(predictor, vis_folder, current_time, args):
     
     #รับและเก็บตำแหน่งเส้นผ่าน
     line = []
-    ret_val, frame = cape.read()  
+    ret_val, frame = cap.read()  
     test = 1
     frameY = frame.shape[0] 
     frameX = frame.shape[1] 
@@ -296,8 +296,10 @@ def imageflow_demo(predictor, vis_folder, current_time, args):
             if mmglobal.frame_count % 3 == 0:
                 outputs, img_info = predictor.inference(frame)
                 #รับข้อมูลทุกอย่าฃ
-                result_frame, bboxes, scores, cls, cls_conf = predictor.visual(outputs[0], img_info, predictor.confthre)
-                
+                result_frame, a = predictor.visual(outputs[0], img_info, predictor.confthre)
+                boxes = a[0] 
+                scores = a[1]
+                cls = a[2]
                 #ต้องdeepsortเพราะอ่านแบบเว้นเฟรม
                 features = encoder(frame, boxes)
                 # represents a bounding box detection in a single image
