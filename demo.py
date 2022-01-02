@@ -26,9 +26,9 @@ from deep_sort import preprocessing
 from deep_sort import nn_matching
 from deep_sort.detection import Detection
 from deep_sort.tracker import Tracker
-import generate_detections as gdet
-import CheckCrossLine
-import newLine
+from tools import generate_detections as gdet
+from tools import CheckCrossLine
+from tools import newLine
 import imutils.video
 from videocaptureasync import VideoCaptureAsync
 
