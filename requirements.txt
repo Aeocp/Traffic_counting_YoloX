@@ -25,6 +25,6 @@ matplotlib
 scikit-learn
 scipy
 tensorboard
-tensorflow
+tensorflow==2.7.0
 tensorflow-estimator
-tensorflow-gpu
+tensorflow-gpu==1.15
