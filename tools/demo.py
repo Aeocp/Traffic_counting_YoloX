@@ -299,7 +299,7 @@ def imageflow_demo(predictor, vis_folder, current_time, args):
                 result_frame, a = predictor.visual(outputs[0], img_info, predictor.confthre)
                 boxes = a[0] 
                 confidence = a[1]
-                cls = a[2]
+                classes = a[2]
                 #ต้องdeepsortเพราะอ่านแบบเว้นเฟรม
                 features = encoder(frame, boxes)
                 # represents a bounding box detection in a single image
