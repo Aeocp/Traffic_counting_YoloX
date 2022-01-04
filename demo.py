@@ -298,7 +298,11 @@ def imageflow_demo(predictor, vis_folder, current_time, args):
             if mmglobal.frame_count % 3 == 0:
                 outputs, img_info = predictor.inference(frame)
                 #รับข้อมูลทุกอย่าฃ
-                result_frame, bboxes, scores, cls, cls_conf = predictor.visual(outputs[0], img_info, predictor.confthre)
+                result_frame, a = predictor.visual(outputs[0], img_info, predictor.confthre)
+                # a = [bboxes, scores, self.cls_names]
+                boxes = a[0] 
+                confidence = a[1]
+                classes = a[2]
                 
                 #ต้องdeepsortเพราะอ่านแบบเว้นเฟรม
                 features = encoder(frame, boxes)
