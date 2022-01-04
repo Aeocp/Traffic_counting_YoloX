@@ -298,7 +298,7 @@ def imageflow_demo(predictor, vis_folder, current_time, args):
                 #รับข้อมูลทุกอย่าฃ
                 result_frame, a = predictor.visual(outputs[0], img_info, predictor.confthre)
                 boxes = a[0] 
-                scores = a[1]
+                confidence = a[1]
                 cls = a[2]
                 #ต้องdeepsortเพราะอ่านแบบเว้นเฟรม
                 features = encoder(frame, boxes)
