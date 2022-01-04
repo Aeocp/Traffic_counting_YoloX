@@ -353,7 +353,7 @@ def imageflow_demo(predictor, vis_folder, current_time, args):
                     xx = ll+1
                     cv2.putText(frame, "Total{}: {}".format(str(xx),str(total_counter[ll])), (int(0.05 * frame.shape[1]), int(yy)), 0,
                         1.5e-3 * frame.shape[0], (0, 255, 255), 2)
-                    yy += 0.1 * frame.shape[0]
+                    yy = yy + (0.1 * frame.shape[0])
                     print("Total",xx,": ",total_counter[ll])
                     
                 # Hui: Show result image
