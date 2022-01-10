@@ -252,7 +252,7 @@ def imageflow_demo(predictor, vis_folder, current_time, args):
     current_date = datetime.datetime.now().date()
     count_dict = {}
   
-    l,x,y = newLine.createLine2()
+    l,x,y = newLine.createLine()
     total_counter = []
     class_counter = []  # store counts of each detected class
     intersect_info = [] # initialise intersection list
