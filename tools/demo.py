@@ -30,7 +30,6 @@ import generate_detections as gdet
 import CheckCrossLine
 import newLine
 import imutils.video
-from videocaptureasync import VideoCaptureAsync
 
 from collections import Counter
 from collections import deque 
