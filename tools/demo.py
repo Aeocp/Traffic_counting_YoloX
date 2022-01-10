@@ -293,7 +293,6 @@ def imageflow_demo(predictor, vis_folder, current_time, args):
                 cv2.line(frame, line_o[0], line_o[1], (255, 255, 255), 2)
         if ret_val:
             # Process every n frames
-            t1 = time.time()
             if mmglobal.frame_count % 3 == 0:
                 outputs, img_info = predictor.inference(frame)
                 if outputs == [None]:
