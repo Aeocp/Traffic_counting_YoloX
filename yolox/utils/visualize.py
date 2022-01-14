@@ -17,9 +17,9 @@ def vis(img, boxes, scores, cls_ids, conf=0.5, class_names=None):
     
     txt_size = []
     for i in range(len(boxes)):
-        if class_names[cls_id[i]] == "car":
-            box = boxes[i]
-            cls_id = int(cls_ids[i])
+        box = boxes[i]
+        cls_id = int(cls_ids[i])
+        if class_names[cls_id] == "car":
             score = scores[i]
             if score < conf:
                 continue
