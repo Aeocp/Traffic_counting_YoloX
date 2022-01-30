@@ -300,7 +300,17 @@ def imageflow_demo(predictor, vis_folder, current_time, args):
                 else:
                   #รับข้อมูลทุกอย่าง
                   result_frame, a = predictor.visual(outputs[0], img_info, predictor.confthre)
-                  boxes = a[0] 
+                  boxesA = a[0]
+                  bbb = []
+                  for bb in boxesA:
+                    bx1 = float(bb[0])
+                    by1 = float(bb[1])
+                    bx2 = float(bb[2])
+                    by2 = float(bb[3])
+                    w = bx2-bx1
+                    h = by2-by1
+                    bbb.append([bx1,by1,w,h])
+                  boxes = torch.Tensor(bbb)
                   confidence = a[1]
                   classes = a[2]
                   #ต้องdeepsortเพราะอ่านแบบเว้นเฟรม
