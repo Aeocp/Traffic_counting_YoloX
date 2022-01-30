@@ -7,4 +7,4 @@ def createLine():
   y.append((Bp[1]))
   x.append((Bp[2]))
   y.append((Bp[3]))
-  return numLine,x,y
+  return x,y
