@@ -251,14 +251,10 @@ def imageflow_demo(predictor, vis_folder, current_time, args):
     current_date = datetime.datetime.now().date()
     count_dict = {}
   
-    l,x,y = newLine.createLine()
-    total_counter = []
-    class_counter = []  # store counts of each detected class
+    x,y = newLine.createLine()
+    total_counter = [0,0,0,0]
+    class_counter = [Counter()]  # store counts of each detected class
     intersect_info = [] # initialise intersection list
-    for ll in range(l):
-        total_counter.append(0)
-        class_counter.append(Counter())
-        intersect_info.append([])
     already_counted = deque(maxlen=50) # temporary memory for storing counted IDs
     memory = {}
     
