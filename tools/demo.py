@@ -318,6 +318,7 @@ def imageflow_demo(predictor, vis_folder, current_time, args):
                   tracker.update(detections)
 
                   for track in tracker.tracks:
+                      cv2.rectangle(frame, (int(bbox[0]), int(bbox[1])), (int(bbox[2]), int(bbox[3])), (255, 0, 0), 2)
                       if not track.is_confirmed() or track.time_since_update > 1:
                           continue
                       bbox = track.to_tlbr()    # (min x, miny, max x, max y)
