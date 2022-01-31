@@ -360,20 +360,23 @@ def imageflow_demo(predictor, vis_folder, current_time, args):
                 
                 # Draw total count.
                 yy = 0.1 * frame.shape[0]
+                cv2.putText(frame, "Frame {}".format(str(frameN)), (int(0.05 * frame.shape[1]), int(yy)), 0,
+                    1.5e-3 * frame.shape[0], (0, 255, 255), 3)
+                yy = yy + (0.1 * frame.shape[0])
                 cv2.putText(frame, "Total: {}".format(str(class_counter[4])), (int(0.05 * frame.shape[1]), int(yy)), 0,
-                    1.5e-3 * frame.shape[0], (0, 255, 255), 2)
-                yy = yy + (0.1 * frame.shape[0])
+                    1.5e-3 * frame.shape[0], (0, 255, 255), 3)
+                yy = yy + (0.05 * frame.shape[0])
                 cv2.putText(frame, "car: {}".format(str(class_counter[0])), (int(0.05 * frame.shape[1]), int(yy)), 0,
-                    1.5e-3 * frame.shape[0], (0, 255, 255), 2)
-                yy = yy + (0.1 * frame.shape[0])
+                    1.5e-3 * frame.shape[0], (0, 255, 255), 3)
+                yy = yy + (0.05 * frame.shape[0])
                 cv2.putText(frame, "motorcycle: {}".format(str(class_counter[1])), (int(0.05 * frame.shape[1]), int(yy)), 0,
-                    1.5e-3 * frame.shape[0], (0, 255, 255), 2)
-                yy = yy + (0.1 * frame.shape[0])
+                    1.5e-3 * frame.shape[0], (0, 255, 255), 3)
+                yy = yy + (0.05 * frame.shape[0])
                 cv2.putText(frame, "bus: {}".format(str(class_counter[2])), (int(0.05 * frame.shape[1]), int(yy)), 0,
-                    1.5e-3 * frame.shape[0], (0, 255, 255), 2)
-                yy = yy + (0.1 * frame.shape[0])
+                    1.5e-3 * frame.shape[0], (0, 255, 255), 3)
+                yy = yy + (0.05 * frame.shape[0])
                 cv2.putText(frame, "truck: {}".format(str(class_counter[3])), (int(0.05 * frame.shape[1]), int(yy)), 0,
-                    1.5e-3 * frame.shape[0], (0, 255, 255), 2)
+                    1.5e-3 * frame.shape[0], (0, 255, 255), 3)
                     
                 # Hui: Show result image
                 #cv2.imshow(win_name, result_frame)
