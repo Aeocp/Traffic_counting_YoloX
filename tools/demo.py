@@ -285,7 +285,9 @@ def imageflow_demo(predictor, vis_folder, current_time, args):
                 outputs, img_info = predictor.inference(frame)
                 if outputs == [None]:
                   print(frameN ," : outputs == [None]")
+                  args.save_result = False
                 else:
+                  args.save_result = True
                   #รับข้อมูลทุกอย่าง
                   result_frame, a = predictor.visual(outputs[0], img_info, predictor.confthre)
                   boxesA = a[0]
