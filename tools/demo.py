@@ -271,8 +271,8 @@ def imageflow_demo(predictor, vis_folder, current_time, args):
     cv2.line(frame, line[0], line[1], (255, 255, 255), 2)
     frameN = 0    
     while True:
+        print("Frame ",frameN)
         frameN += 1
-        
         if (test == 1):
             test = 0
         else:
@@ -284,7 +284,6 @@ def imageflow_demo(predictor, vis_folder, current_time, args):
             if mmglobal.frame_count % 3 == 0:
                 outputs, img_info = predictor.inference(frame)
                 if outputs == [None]:
-                  print(frameN ," : outputs == [None]")
                   args.save_result = False
                 else:
                   args.save_result = True
@@ -352,7 +351,6 @@ def imageflow_demo(predictor, vis_folder, current_time, args):
                           already_counted.append(track.track_id)  # Set already counted for ID to true.
                           intersection_time = datetime.datetime.now() - datetime.timedelta(microseconds=datetime.datetime.now().microsecond)
                           intersect_info.append([track_cls, origin_midpoint, intersection_time])
-                          print("Frame ",frameN)
                           print("class_counter[car,motorcycle,bus,truck,all] = ",class_counter)
               
                 # Delete memory of old tracks.
@@ -363,22 +361,22 @@ def imageflow_demo(predictor, vis_folder, current_time, args):
                 # Draw total count.
                 yy = 0.1 * frame.shape[0]
                 cv2.putText(frame, "Frame {}".format(str(frameN)), (int(0.05 * frame.shape[1]), int(yy)), 0,
-                    1.5e-3 * frame.shape[0], (0, 255, 255), 3)
+                    1.5e-3 * frame.shape[0], (0, 255, 255), 2)
                 yy = yy + (0.1 * frame.shape[0])
                 cv2.putText(frame, "Total: {}".format(str(class_counter[4])), (int(0.05 * frame.shape[1]), int(yy)), 0,
-                    1.5e-3 * frame.shape[0], (0, 255, 255), 3)
+                    1.5e-3 * frame.shape[0], (0, 255, 255), 2)
                 yy = yy + (0.05 * frame.shape[0])
                 cv2.putText(frame, "car: {}".format(str(class_counter[0])), (int(0.05 * frame.shape[1]), int(yy)), 0,
-                    1.5e-3 * frame.shape[0], (0, 255, 255), 3)
+                    1.5e-3 * frame.shape[0], (0, 255, 255), 2)
                 yy = yy + (0.05 * frame.shape[0])
                 cv2.putText(frame, "motorcycle: {}".format(str(class_counter[1])), (int(0.05 * frame.shape[1]), int(yy)), 0,
-                    1.5e-3 * frame.shape[0], (0, 255, 255), 3)
+                    1.5e-3 * frame.shape[0], (0, 255, 255), 2)
                 yy = yy + (0.05 * frame.shape[0])
                 cv2.putText(frame, "bus: {}".format(str(class_counter[2])), (int(0.05 * frame.shape[1]), int(yy)), 0,
-                    1.5e-3 * frame.shape[0], (0, 255, 255), 3)
+                    1.5e-3 * frame.shape[0], (0, 255, 255), 2)
                 yy = yy + (0.05 * frame.shape[0])
                 cv2.putText(frame, "truck: {}".format(str(class_counter[3])), (int(0.05 * frame.shape[1]), int(yy)), 0,
-                    1.5e-3 * frame.shape[0], (0, 255, 255), 3)
+                    1.5e-3 * frame.shape[0], (0, 255, 255), 2)
                     
                 # Hui: Show result image
                 #cv2.imshow(win_name, result_frame)
