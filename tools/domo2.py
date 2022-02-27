@@ -40,9 +40,9 @@ IMAGE_EXT = [".jpg", ".jpeg", ".webp", ".bmp", ".png"]
 
 
 def make_parser():
-    parser = argparse.ArgumentParser("YOLOX Demo!")
+    parser = argparse.ArgumentParser("YOLOX Demo2!")
     parser.add_argument(
-        "demo", default="image", help="demo type, eg. image, video and webcam"
+        "demo2", default="image", help="demo2 type, eg. image, video and webcam"
     )
     parser.add_argument("-expn", "--experiment-name", type=str, default=None)
     parser.add_argument("-n", "--name", type=str, default=None, help="model name")
@@ -50,7 +50,7 @@ def make_parser():
     parser.add_argument(
         "--path", default="./assets/dog.jpg", help="path to images or video"
     )
-    parser.add_argument("--camid", type=int, default=0, help="webcam demo camera id")
+    parser.add_argument("--camid", type=int, default=0, help="webcam demo2 camera id")
     parser.add_argument(
         "--save_result",
         action="store_true",
@@ -189,7 +189,7 @@ class Predictor(object):
         return vis_res, a
 
 
-def image_demo(predictor, vis_folder, path, current_time, save_result):
+def image_demo2(predictor, vis_folder, path, current_time, save_result):
     if os.path.isdir(path):
         files = get_image_list(path)
     else:
@@ -211,8 +211,8 @@ def image_demo(predictor, vis_folder, path, current_time, save_result):
             break
 
 
-def imageflow_demo(predictor, vis_folder, current_time, args):
-    cap = cv2.VideoCapture(args.path if args.demo == "video" else args.camid) #video
+def imageflow_demo2(predictor, vis_folder, current_time, args):
+    cap = cv2.VideoCapture(args.path if args.demo2 == "video" else args.camid) #video
     #cap = cv2.VideoCapture("https://camerai1.iticfoundation.org/hls/pty02.m3u8") #url real-time
     width = cap.get(cv2.CAP_PROP_FRAME_WIDTH)  # float
     height = cap.get(cv2.CAP_PROP_FRAME_HEIGHT)  # float
@@ -221,7 +221,7 @@ def imageflow_demo(predictor, vis_folder, current_time, args):
         vis_folder, time.strftime("%Y_%m_%d_%H_%M_%S", current_time)
     )
     os.makedirs(save_folder, exist_ok=True)
-    if args.demo == "video":
+    if args.demo2 == "video":
         save_path = os.path.join(save_folder, args.path.split("/")[-1])
     else:
         save_path = os.path.join(save_folder, "camera.mkv")
@@ -455,10 +455,10 @@ def main(exp, args):
 
     predictor = Predictor(model, exp, COCO_CLASSES, trt_file, decoder, args.device)
     current_time = time.localtime()
-    if args.demo == "image":
-        image_demo(predictor, vis_folder, args.path, current_time, args.save_result)
-    elif args.demo == "video" or args.demo == "webcam":
-        imageflow_demo(predictor, vis_folder, current_time, args)
+    if args.demo2 == "image":
+        image_demo2(predictor, vis_folder, args.path, current_time, args.save_result)
+    elif args.demo2 == "video" or args.demo2 == "webcam":
+        imageflow_demo2(predictor, vis_folder, current_time, args)
 
 
 if __name__ == "__main__":
